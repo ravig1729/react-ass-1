@@ -1,22 +1,66 @@
-import React from 'react'
-import LFuncCompo from './Assignment1/LFuncCompo'
-import LClassCompo from './Assignment1/LClassCompo'
-import './Assignment1/myStyle1.css'
+import React, { Component } from 'react'
+import './Assignment2/Style.css'
 
-class App extends React.Component {
+class App extends Component {
+
   state = {
-    showClass: true,
-    showFunc: true
+    name: "",
+    department: "",
+    rating: "",
+    employees: [],
+    show: false
   }
+
+  handleChange = (event) => {
+    console.log(event.target);
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  OnSubmit(event) {
+    event.preventDefault();
+    const Obj = {
+      name: this.state.name,
+      department: this.state.department,
+      rating: this.state.rating
+    }
+
+    this.state.employees.push(Obj)
+    this.setState({
+      name: "",
+      department: "",
+      rating: "",
+      show: true
+
+    })
+    console.log(this.state.employees)
+  }
+
   render() {
     return (
-      <div>
-        <h1 className="minus">Styling using Functional and Class Component</h1>
-        <button onClick = {() => this.setState({showFunc : !this.state.showFunc}) } className="first">To see styling in functional component</button>
-        <button onClick={() => this.setState({showClass : !this.state.showClass})} className="second">To see styling in class component</button>
-        {this.state.showFunc && <LFuncCompo /> ? null : <LFuncCompo />}
-        {this.state.showClass && <LClassCompo /> ? null : <LClassCompo />}
-      </div>
+      <>
+        <div className='container'>
+          <h1>EMPLOYEE FEEDBACK FORM</h1>
+          <form action="">
+            <label for="name">Name : </label>
+            <input required type="text" id="name" value={this.state.name} name="name" onChange={this.handleChange} /><br></br>
+            <label for="department">Department : </label>
+            <input required type="text" id="department" value={this.state.department} name="department" onChange={this.handleChange} /><br></br>
+            <label for="rating">Rating : </label>
+            <input required type="number" id="rating" value={this.state.rating} name="rating" onChange={this.handleChange} /><br></br>
+
+          </form>
+          <button type="submit" onClick={this.OnSubmit.bind(this)}>Submit</button>
+        </div>
+        {this.state.show && <div className='EmploData'>
+          {this.state.employees.length > 0 && this.state.employees.map((event) => {
+            return (<div className='data'>
+              <h1>{event.name} || {event.department} || {event.rating}</h1>
+            </div>)
+          })}
+        </div>}
+      </>
     )
   }
 }
